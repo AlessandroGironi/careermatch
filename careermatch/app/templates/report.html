@@ -1,0 +1,385 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Career Match Report</title>
+  <style>
+    :root {
+      --bg:#0b1020;
+      --card:#121a33;
+      --text:#e8ecff;
+      --muted:#a8b0d6;
+      --border:rgba(255,255,255,.10);
+      --yes:#2ecc71;
+      --maybe:#f1c40f;
+      --no:#e74c3c;
+    }
+
+    body{
+      margin:0;
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;
+      background:var(--bg);
+      color:var(--text);
+      padding:24px;
+    }
+
+    .container{max-width:980px;margin:0 auto;}
+
+    header{
+      display:flex;
+      align-items:flex-end;
+      justify-content:space-between;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-bottom:14px;
+    }
+
+    h1{margin:0;font-size:22px;}
+
+    .meta{color:var(--muted);font-size:13px;}
+
+    /* Layout principale: solo card risultato */
+    .grid{
+      display:grid;
+      grid-template-columns:1fr;
+      gap:16px;
+      align-items:start;
+    }
+
+    .card{
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:18px;
+      padding:16px;
+    }
+
+    .row{
+      display:flex;
+      gap:12px;
+      align-items:center;
+      justify-content:space-between;
+      flex-wrap:wrap;
+    }
+
+    .badge{
+      padding:8px 12px;
+      border-radius:999px;
+      font-weight:900;
+      font-size:13px;
+      border:1px solid var(--border);
+      background:rgba(255,255,255,.06);
+    }
+    .badge.yes{color:var(--yes);border-color:rgba(46,204,113,.35);}
+    .badge.maybe{color:var(--maybe);border-color:rgba(241,196,15,.35);}
+    .badge.no{color:var(--no);border-color:rgba(231,76,60,.35);}
+
+    .score-wrap{display:flex;gap:14px;align-items:center;}
+    .score{font-size:40px;font-weight:1000;line-height:1;}
+    .score small{font-size:14px;color:var(--muted);font-weight:800;margin-left:6px;}
+
+    .progress{
+      height:10px;
+      border-radius:999px;
+      border:1px solid var(--border);
+      background:rgba(255,255,255,.05);
+      overflow:hidden;
+      min-width:240px;
+    }
+
+    .bar{height:100%;}
+
+    .bar-red{background: rgba(231,76,60,.85);}
+    .bar-yellow{background: rgba(241,196,15,.85);}
+    .bar-green{background: rgba(46,204,113,.85);}
+
+    .kpis{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-top:10px;
+      color:var(--muted);
+      font-size:13px;
+    }
+    .kpis b{color:var(--text);}
+
+    .title{
+      margin:0 0 8px;
+      font-size:12px;
+      color:var(--muted);
+      text-transform:uppercase;
+      letter-spacing:.06em;
+    }
+
+    .next{
+      margin-top:12px;
+      padding:12px;
+      border-radius:14px;
+      border:1px dashed var(--border);
+      background:rgba(255,255,255,.04);
+    }
+    .next b{display:block;margin-bottom:4px;}
+
+    details{margin-top:12px;border-top:1px solid var(--border);padding-top:12px;}
+    summary{cursor:pointer;font-weight:900;}
+    .muted{color:var(--muted);}
+
+    ul{margin:0;padding-left:18px;}
+    li{margin:6px 0;}
+    .compact li{margin:4px 0;}
+
+    /* Actions */
+    .actions{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-top:14px;
+    }
+
+    .action-btn{
+      padding:10px 14px;
+      border-radius:14px;
+      border:1px solid var(--border);
+      background:rgba(255,255,255,.06);
+      color:var(--text);
+      font-weight:900;
+      cursor:pointer;
+      text-decoration:none;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+    }
+
+    .action-btn.primary{
+      background:rgba(122,162,255,.15);
+      border-color:rgba(122,162,255,.35);
+    }
+
+    .action-btn:hover{
+      background:rgba(255,255,255,.10);
+    }
+
+    /* WHY: full width + orizzontale */
+    .why-card{
+      margin-top:16px;
+    }
+
+    .why-head{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:12px;
+      margin-bottom:10px;
+    }
+
+    .why-head .k{
+      font-size:12px;
+      color:var(--muted);
+      text-transform:uppercase;
+      letter-spacing:.06em;
+      margin:0;
+    }
+
+    .why-head .helper{
+      color:var(--muted);
+      font-size:13px;
+      margin-top:4px;
+      line-height:1.35;
+    }
+
+    .why-horizontal{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:16px;
+      align-items:start;
+    }
+
+    @media (max-width:920px){
+      .why-horizontal{grid-template-columns:1fr;}
+    }
+
+    .why-col{
+      border:1px solid var(--border);
+      border-radius:16px;
+      padding:14px;
+      background:rgba(255,255,255,.03);
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      overflow:hidden;
+    }
+
+    .why-col-head{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      font-weight:1000;
+      font-size:14px;
+      letter-spacing:.01em;
+    }
+
+    .why-col .count{
+      font-size:12px;
+      padding:4px 10px;
+      border-radius:999px;
+      border:1px solid var(--border);
+      background:rgba(255,255,255,.06);
+      color:var(--text);
+    }
+
+    .why-list{
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+    }
+
+    /* Item (riuso i tuoi placeholder strengths_cards/blockers_cards) */
+    .qitem{
+      display:flex;
+      gap:10px;
+      align-items:flex-start;
+      padding:10px 10px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.08);
+      background:rgba(0,0,0,.10);
+      position:relative;
+      overflow:hidden;
+    }
+    .qitem::before{
+      content:"";
+      position:absolute;
+      left:0; top:0; bottom:0;
+      width:3px;
+      background:rgba(255,255,255,.18);
+    }
+
+    /* banda laterale per colonna */
+    .why-col.pos .qitem::before{ background:rgba(46,204,113,.85); }
+    .why-col.neg .qitem::before{ background:rgba(231,76,60,.85); }
+
+    .qicon{
+      width:22px;
+      height:22px;
+      border-radius:999px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-weight:1000;
+      font-size:12px;
+      flex:0 0 auto;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,255,255,.06);
+    }
+
+    .qtext{
+      font-size:13px;
+      color:var(--text);
+      line-height:1.3;
+
+      /* max 2 righe + ellissi */
+      display:-webkit-box;
+      -webkit-line-clamp:2;
+      -webkit-box-orient:vertical;
+      overflow:hidden;
+      word-break:break-word;
+    }
+
+    .qempty{
+      color:var(--muted);
+      font-size:13px;
+      padding:6px 2px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <header>
+      <div>
+        <h1>Career Match</h1>
+        <div class="meta">{{job_title}} • Report: {{json_file_name}}</div>
+      </div>
+      <div class="badge {{decision_badge}}">{{decision_code}}</div>
+    </header>
+
+    <div class="grid">
+      <!-- MAIN: decision -->
+      <div class="card">
+        <div class="title">Result</div>
+
+        <div class="row">
+          <div>
+            <div style="font-size:18px;font-weight:1000;">{{decision_label}}</div>
+            <div class="muted" style="margin-top:4px;">{{decision_reason}}</div>
+          </div>
+
+          <div class="score-wrap">
+            <div class="score">{{fit_score}}<small>/100</small></div>
+          </div>
+        </div>
+
+        <div style="margin-top:12px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+          <div class="progress" aria-label="Fit score">
+            <div class="bar {{score_bar_class}}" style="width: {{fit_score}}%;"></div>
+          </div>
+          <div class="kpis">
+            <div><b>Confidence:</b> {{confidence}}</div>
+          </div>
+        </div>
+
+        <div class="next">
+          <b>Next step</b>
+          <div class="muted">{{next_step}}</div>
+        </div>
+
+        <div class="actions">
+          <a class="action-btn primary" href="/">🔁 New match</a>
+
+          <a class="action-btn" href="/download/{{job_id}}/json" download>
+            📄 Download report
+          </a>
+        </div>
+
+        <details open>
+          <summary>Details</summary>
+          <p class="muted">{{summary}}</p>
+          <p class="muted"><b>Final note:</b> {{final_note}}</p>
+        </details>
+      </div>
+    </div>
+
+    <!-- WHY: full width, orizzontale -->
+    <div class="card why-card">
+      <div class="why-head">
+        <div>
+          <div class="k">Why</div>
+          <div class="helper">Key takeaways from the analysis (up to 3 items per section).</div>
+        </div>
+      </div>
+
+      <div class="why-horizontal">
+        <div class="why-col pos">
+          <div class="why-col-head">
+            <span>✅ Strengths</span>
+            <span class="count">{{strengths_count}}</span>
+          </div>
+          <div class="why-list">
+            {{strengths_cards}}
+          </div>
+        </div>
+
+        <div class="why-col neg">
+          <div class="why-col-head">
+            <span>❌ Main blockers</span>
+            <span class="count">{{blockers_count}}</span>
+          </div>
+          <div class="why-list">
+            {{blockers_cards}}
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</body>
+</html>

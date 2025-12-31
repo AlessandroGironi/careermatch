@@ -1,0 +1,10 @@
+datapizza-ai
+python-dotenv
+pydantic
+requests
+beautifulsoup4
+fastapi
+uvicorn
+jinja2
+python-multipart
+pypdf
