@@ -1,5 +1,7 @@
 # CareerMatch
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
 CareerMatch is an open-source, Docker-ready proof of concept that compares a CV with a LinkedIn job post and generates a structured fit report, including a score, strengths, gaps, and actionable suggestions.
 
 This project intentionally uses **only free LLM models available on OpenRouter** and is built on top of the **datapizza-ai framework**.
