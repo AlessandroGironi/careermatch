@@ -83,13 +83,10 @@ Reports can be downloaded in **HTML** and **JSON** formats.
 ---
 
 ## Screenshots
-Upload
 ![Upload page](screenshots/upload.png)
 
-Wait
 ![Analysis in progress](screenshots/wait.png)
 
-Report
 ![Final report](screenshots/report.png)
 
 ---
