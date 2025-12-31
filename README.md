@@ -82,6 +82,11 @@ Reports can be downloaded in **HTML** and **JSON** formats.
 
 ## Screenshots
 
+_Add screenshots of the application UI here._
+
+![Upload page](screenshots/upload.png)
+![Analysis in progress](screenshots/wait.png)
+![Final report](screenshots/report.png)
 
 ---
 
